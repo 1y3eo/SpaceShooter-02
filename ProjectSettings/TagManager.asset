@@ -7,15 +7,16 @@ TagManager:
   - BULLET
   - PLAYER
   - PUNCH
+  - MONSTER
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - BARREL
   - Water
   - UI
-  - 
-  - 
+  - MONSTER_BODY
+  - MONSTER_PUNCH
   - 
   - 
   - 
