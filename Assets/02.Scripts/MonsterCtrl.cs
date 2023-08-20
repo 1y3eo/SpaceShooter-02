@@ -41,25 +41,40 @@ public class MonsterCtrl : MonoBehaviour
     private void OnEnable()
     {
         PlayerCtrl.OnPlayerDie += this.OnPlayerDie;
+
+        StartCoroutine(CheckMonsterState());
+        StartCoroutine(MonsterAction());
     }
 
     private void OnDisable()
     {
         PlayerCtrl.OnPlayerDie -= this.OnPlayerDie;
     }
-    void Start()
+    void Awake()
     {
         monsterTr = GetComponent<Transform>();
         playerTr = GameObject.FindWithTag("PLAYER").GetComponent<Transform>();
         agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
         anim = GetComponent<Animator>();
         bloodEffect = Resources.Load<GameObject>("BloodSprayEffect");
 
         // agent.destination = playerTr.position;
 
-        StartCoroutine(CheckMonsterState());
-        StartCoroutine(MonsterAction());
+    }
 
+    void Update()
+    {
+        if (agent.remainingDistance >= 2.0f)
+        {
+            Vector3 direction = agent.desiredVelocity;
+
+            if (direction.sqrMagnitude >= 0.1f * 0.1f)
+            {
+                Quaternion rot = Quaternion.LookRotation(direction);
+                monsterTr.rotation = Quaternion.Slerp(monsterTr.rotation, rot, Time.deltaTime * 10.0f);
+            }
+        }
     }
 
     IEnumerator CheckMonsterState()
@@ -128,18 +143,22 @@ public class MonsterCtrl : MonoBehaviour
         if (collision.collider.CompareTag("BULLET"))
         {
             Destroy(collision.gameObject);
-            anim.SetTrigger(hashHit);
+        }
+    }
 
-            Vector3 pos = collision.GetContact(0).point;
-            Quaternion rot = Quaternion.LookRotation(-collision.GetContact(0).normal);
-            ShowBloodEffect(pos, rot);
+    public void OnDamage(Vector3 pos, Vector3 normal)
+    {
 
-            hp -= 10;
-            if (hp <= 0)
-            {
-                state = State.DIE;
-                GameManager.instance.DisplayScore(50);
-            }
+        anim.SetTrigger(hashHit);
+
+        Quaternion rot = Quaternion.LookRotation(normal);
+        ShowBloodEffect(pos, rot);
+
+        hp -= 10;
+        if (hp <= 0)
+        {
+            state = State.DIE;
+            GameManager.instance.DisplayScore(50);
         }
     }
 
