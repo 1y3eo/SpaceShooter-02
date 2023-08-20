@@ -152,9 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c8bff220ffb4e408e627126b81a33a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startButton: {fileID: 0}
-  optionButton: {fileID: 0}
-  shopButton: {fileID: 0}
+  startButton: {fileID: 1786688947}
+  optionButton: {fileID: 1559937834}
+  shopButton: {fileID: 426833103}
 --- !u!4 &129706958
 Transform:
   m_ObjectHideFlags: 0
@@ -1305,7 +1305,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 129706957}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: OnButtonClick
+        m_MethodName: OnStartClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
